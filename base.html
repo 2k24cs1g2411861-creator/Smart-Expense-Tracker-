@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Smart Expense Tracker{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header><a href="{{ url_for('dashboard') if session.get('user_id') else url_for('login') }}">Smart Expense Tracker</a>
+    {% if session.get('user_id') %}<span>{{ session.get('username') }} · <a href="{{ url_for('logout') }}">Log out</a></span>{% endif %}
+  </header>
+  <main>
+    {% with messages = get_flashed_messages() %}{% if messages %}<div class="messages">{% for message in messages %}<p>{{ message }}</p>{% endfor %}</div>{% endif %}{% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

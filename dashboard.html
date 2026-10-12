@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Dashboard · Expense Tracker{% endblock %}
+{% block content %}
+<h1>Monthly dashboard</h1>
+<form class="month-filter" method="get"><label>Choose month<input type="month" name="month" value="{{ month }}"></label><button>Filter</button></form>
+<div class="summary"><span>Total expenses for {{ month }}</span><strong>₹{{ '%.2f'|format(total) }}</strong></div>
+<div class="columns">
+<section class="panel"><h2>Add an expense</h2><form method="post" action="{{ url_for('add_expense') }}">
+<label>Amount (₹)<input type="number" name="amount" min="0.01" step="0.01" required></label>
+<label>Category<select name="category_id" required>{% for category in categories %}<option value="{{ category.id }}">{{ category.name }}</option>{% endfor %}</select></label>
+<label>Date<input type="date" name="expense_date" value="{{ today }}" required></label>
+<label>Note<input name="note" maxlength="200" placeholder="e.g. Lunch"></label><button>Add expense</button></form></section>
+<section class="panel"><h2>Category totals</h2>{% if category_totals %}<ul class="totals">{% for item in category_totals %}<li><span>{{ item.name }}</span><strong>₹{{ '%.2f'|format(item.total) }}</strong></li>{% endfor %}</ul>{% else %}<p>No expenses for this month yet.</p>{% endif %}</section>
+</div>
+<section class="panel"><h2>Expenses</h2>{% if expenses %}<div class="table-wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Note</th><th>Amount</th><th>Actions</th></tr></thead><tbody>
+{% for e in expenses %}<tr><td>{{ e.expense_date }}</td><td>{{ e.category or 'Other' }}</td><td>{{ e.note }}</td><td>₹{{ '%.2f'|format(e.amount) }}</td><td><a href="{{ url_for('edit_expense', expense_id=e.id) }}">Edit</a>
+<form class="inline" method="post" action="{{ url_for('delete_expense', expense_id=e.id) }}" onsubmit="return confirm('Delete this expense?')"><button class="danger">Delete</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p>No expenses found for this month.</p>{% endif %}</section>
+{% endblock %}

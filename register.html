@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block title %}Register · Expense Tracker{% endblock %}
+{% block content %}<section class="panel"><h1>Create account</h1><form method="post">
+<label>Username<input name="username" required minlength="3" autocomplete="username"></label>
+<label>Password<input name="password" type="password" required minlength="8" autocomplete="new-password"></label>
+<button>Register</button></form><p>Already registered? <a href="{{ url_for('login') }}">Log in</a></p></section>{% endblock %}
